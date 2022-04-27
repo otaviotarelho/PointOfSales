@@ -22,7 +22,7 @@ A: For each test it was about 1 hour total (functional and manual testing)
 
 2. What would you add if you had more time?
 A: I would add:
-   - More test scenarios
+   - More test scenarios, specially for user case
    - Divide api, business and domain into modules
    - Add circuit break for when the product api is off
    - Use docker to run the application in any environment
