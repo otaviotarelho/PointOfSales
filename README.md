@@ -8,7 +8,7 @@
 
 ## Running
 - Access this folder and run the command
-    '''mvn clean install && mvn spring-boot:run'''
+    ```mvn clean install && mvn spring-boot:run```
 
 ## Api Documentation
 Api documentation can be found at swagger page: localhost:8181/swagger-ui/index.html#
