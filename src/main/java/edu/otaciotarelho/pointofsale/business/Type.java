@@ -36,7 +36,7 @@ public enum Type  implements BiFunction<ItemDTO, Promotion, BigDecimal> {
 
             return item.getPrice().multiply(
                     BigDecimal.valueOf((long) (item.getQuantity() / promotion.getRequiredQty())
-                            * promotion.getFree_qty())
+                            * promotion.getFreeQty())
             );
         }
 

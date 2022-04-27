@@ -37,7 +37,7 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public Basket addItemToBasket(UUID basketId, String productId, int amount) {
+    public Basket addItemToBasket(UUID basketId, String productId, int quantity) {
         var basket = repository.findById(basketId)
                 .orElseThrow(BasketNotFoundException::new);
 
@@ -51,7 +51,7 @@ public class BasketServiceImpl implements BasketService {
                 .findAny()
                 .orElse(new Item());
 
-        found.increaseQuantity();
+        found.increaseQuantity(quantity);
 
         if(found.getId() == null){
             Product product = productService.getProduct(productId);

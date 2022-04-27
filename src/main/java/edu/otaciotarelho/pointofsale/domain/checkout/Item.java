@@ -30,7 +30,7 @@ public class Item {
     private int quantity;
 
     @Transient
-    public void increaseQuantity(){
-        quantity++;
+    public void increaseQuantity(int quantity){
+        this.quantity = this.quantity + quantity;
     }
 }

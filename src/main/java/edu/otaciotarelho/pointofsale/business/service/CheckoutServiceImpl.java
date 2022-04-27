@@ -5,6 +5,7 @@ import edu.otaciotarelho.pointofsale.domain.checkout.Basket;
 import edu.otaciotarelho.pointofsale.domain.checkout.Item;
 import edu.otaciotarelho.pointofsale.domain.checkout.dto.BasketDTO;
 import edu.otaciotarelho.pointofsale.domain.checkout.dto.ItemDTO;
+import edu.otaciotarelho.pointofsale.domain.exception.EmptyBasketException;
 import edu.otaciotarelho.pointofsale.domain.external.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,6 +29,10 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     public BasketDTO checkout(Basket basket){
 
+        if(basket.getItems() == null || basket.getItems().isEmpty()){
+            throw new EmptyBasketException();
+        }
+
         var item = basket.getItems().stream()
                 .map(this::getItem)
                 .collect(Collectors.toList());
@@ -38,15 +43,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 .items(item)
                 .build();
 
-        var finalBasket = calculateBasket(checkoutBasket);
-
-        saveOrder();
-
-        return finalBasket;
-    }
-
-    private void saveOrder() {
-        //TODO PLUS
+        return calculateBasket(checkoutBasket);
     }
 
     private BasketDTO calculateBasket(BasketDTO checkoutBasket) {
@@ -74,13 +71,19 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private BigDecimal calculatePromos(List<ItemDTO> item) {
         var total = item.stream().mapToDouble(
-                i-> i.getPromotions()
-                        .stream()
-                        .mapToDouble(promo -> promo.getType()
-                                .apply(i, promo)
-                                .doubleValue()
-                        )
-                        .sum()
+                i-> {
+                        if(i.getPromotions() == null) {
+                            return 0;
+                        }
+
+                        return i.getPromotions()
+                            .stream()
+                            .mapToDouble(promo -> promo.getType()
+                                    .apply(i, promo)
+                                    .doubleValue()
+                            )
+                            .sum();
+                }
         ).sum();
 
         return BigDecimal.valueOf(total);
@@ -93,6 +96,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 .productId(product.getId())
                 .name(product.getName())
                 .promotions(product.getPromotions())
+                .price(product.getPrice())
                 .quantity(item.getQuantity())
                 .build();
     }

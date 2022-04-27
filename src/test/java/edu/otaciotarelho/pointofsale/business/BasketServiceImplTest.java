@@ -39,9 +39,9 @@ class BasketServiceImplTest {
     private Product product;
 
     @Autowired
-    public BasketServiceImplTest(BasketRepository repository, CheckoutServiceImpl checkoutService) {
+    public BasketServiceImplTest(BasketRepository repository) {
         this.repository = repository;
-        this.checkoutService = checkoutService;
+        this.checkoutService = new CheckoutServiceImpl(productService);
         basketService = new BasketServiceImpl(productService, repository, checkoutService);
     }
 

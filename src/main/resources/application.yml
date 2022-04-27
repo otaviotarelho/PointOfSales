@@ -15,4 +15,4 @@ spring:
       path: /h2
 
 product:
-  url: "localhost:8081"
+  url: "http://localhost:8081"

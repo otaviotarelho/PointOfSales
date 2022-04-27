@@ -1,22 +1,22 @@
 package edu.otaciotarelho.pointofsale.api.handler;
 
 import edu.otaciotarelho.pointofsale.domain.exception.BasketNotFoundException;
+import edu.otaciotarelho.pointofsale.domain.exception.EmptyBasketException;
 import edu.otaciotarelho.pointofsale.domain.exception.ProductNotFoundException;
 import edu.otaciotarelho.pointofsale.domain.exception.StandardError;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.function.ServerResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.web.servlet.function.ServerResponse.status;
 
 @ControllerAdvice
 public class ControllerHandler {
 
     @ExceptionHandler(BasketNotFoundException.class)
-    public ServerResponse notFoundBasket(BasketNotFoundException e, HttpServletRequest request){
+    public ResponseEntity<StandardError> notFoundBasket(BasketNotFoundException e, HttpServletRequest request){
         var err  = StandardError.builder()
                 .timestamp(System.currentTimeMillis())
                 .status(NOT_FOUND.value())
@@ -25,11 +25,11 @@ public class ControllerHandler {
                 .path(request.getRequestURI())
                 .build();
 
-        return status(NOT_FOUND).body(err);
+        return ResponseEntity.status(NOT_FOUND).body(err);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ServerResponse notFoundProduct(ProductNotFoundException e, HttpServletRequest request){
+    public ResponseEntity<StandardError> notFoundProduct(ProductNotFoundException e, HttpServletRequest request){
         var err  = StandardError.builder()
                 .timestamp(System.currentTimeMillis())
                 .status(NOT_FOUND.value())
@@ -38,6 +38,19 @@ public class ControllerHandler {
                 .path(request.getRequestURI())
                 .build();
 
-        return status(NOT_FOUND).body(err);
+        return ResponseEntity.status(NOT_FOUND).body(err);
+    }
+
+    @ExceptionHandler(EmptyBasketException.class)
+    public ResponseEntity<StandardError> notFoundProduct(EmptyBasketException e, HttpServletRequest request){
+        var err  = StandardError.builder()
+                .timestamp(System.currentTimeMillis())
+                .status(NOT_FOUND.value())
+                .error("Empty Basket")
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(NOT_FOUND).body(err);
     }
 }

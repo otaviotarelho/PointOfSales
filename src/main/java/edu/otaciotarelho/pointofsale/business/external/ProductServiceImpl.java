@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProduct(String id) {
         try{
-            return restTemplate.getForObject(productUrl + "/" + id, Product.class);
+            return restTemplate.getForObject(productUrl + "/products/" + id, Product.class);
         } catch (Exception e){
             throw new ProductNotFoundException();
         }
