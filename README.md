@@ -12,7 +12,7 @@
 
 
 ##Api Documentation
-Api documentation can be found at swagger page:
+Api documentation can be found at swagger page: localhost:8181/swagger-ui/index.html#
 
 
 ##Follow-up Questions

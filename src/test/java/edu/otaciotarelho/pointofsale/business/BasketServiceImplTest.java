@@ -1,6 +1,8 @@
 package edu.otaciotarelho.pointofsale.business;
 
 import edu.otaciotarelho.pointofsale.business.repository.BasketRepository;
+import edu.otaciotarelho.pointofsale.business.service.BasketServiceImpl;
+import edu.otaciotarelho.pointofsale.business.service.CheckoutServiceImpl;
 import edu.otaciotarelho.pointofsale.domain.checkout.Basket;
 import edu.otaciotarelho.pointofsale.domain.exception.BasketNotFoundException;
 import edu.otaciotarelho.pointofsale.domain.external.Product;
@@ -30,14 +32,17 @@ class BasketServiceImplTest {
 
     private final BasketServiceImpl basketService;
 
+    private final CheckoutServiceImpl checkoutService;
+
     private Basket basket;
 
     private Product product;
 
     @Autowired
-    public BasketServiceImplTest(BasketRepository repository) {
+    public BasketServiceImplTest(BasketRepository repository, CheckoutServiceImpl checkoutService) {
         this.repository = repository;
-        basketService = new BasketServiceImpl(productService, repository);
+        this.checkoutService = checkoutService;
+        basketService = new BasketServiceImpl(productService, repository, checkoutService);
     }
 
     @BeforeEach
@@ -86,12 +91,12 @@ class BasketServiceImplTest {
 
         basket = basketService.addItemToBasket(basket.getId(), product.getId(), 1);
 
-        basket = basketService.checkout(basket.getId());
+        var basketDTO = basketService.checkout(basket.getId());
 
         assertAll(
-                () -> assertNotNull(basket),
-                () -> assertNotNull(basket.getItems()),
-                () -> assertEquals(1, basket.getItems().size())
+                () -> assertNotNull(basketDTO),
+                () -> assertNotNull(basketDTO.getItems()),
+                () -> assertEquals(1, basketDTO.getItems().size())
         );
     }
 

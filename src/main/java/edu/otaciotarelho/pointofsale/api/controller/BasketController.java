@@ -2,6 +2,7 @@ package edu.otaciotarelho.pointofsale.api.controller;
 
 import edu.otaciotarelho.pointofsale.domain.business.BasketService;
 import edu.otaciotarelho.pointofsale.domain.checkout.Basket;
+import edu.otaciotarelho.pointofsale.domain.checkout.dto.BasketDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.function.ServerResponse;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @RestController
 @RequestMapping(value="/basket")
@@ -33,22 +30,22 @@ public class BasketController {
     }
 
     @PostMapping(value="/{basket_id}/product/{product_id}")
-    ServerResponse addItem(
+    ResponseEntity<Void> addItem(
             @PathVariable("basket_id") final UUID id,
             @PathVariable("product_id")   final String productId,
             @RequestParam("qty") final Integer quantity
     ) {
         basketService.addItemToBasket(id, productId, quantity);
 
-        return ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{basket_id}/product/{product_id}")
-    ServerResponse deleteItem(@PathVariable("basket_id") final UUID id,
+    ResponseEntity<Void> deleteItem(@PathVariable("basket_id") final UUID id,
                     @PathVariable("product_id") final String productId) {
         basketService.removeItemFromBasket(id, productId);
-        return ok().build();
-    }
+        return ResponseEntity.ok().build();
+    } //didn't worked
 
     @PostMapping
     ResponseEntity<Basket> createBasket(){
@@ -64,14 +61,14 @@ public class BasketController {
     }
 
     @DeleteMapping(value = "/{basket_id}")
-    ServerResponse removeBasket(@PathVariable("basket_id") final UUID id){
+    ResponseEntity<Void> removeBasket(@PathVariable("basket_id") final UUID id){
         basketService.removeBasket(id);
-        return ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/checkout/{basket_id}")
-    ServerResponse finishOrder(@PathVariable("basket_id") final UUID id){
-        return ok().body(basketService.checkout(id));
+    ResponseEntity<BasketDTO> finishOrder(@PathVariable("basket_id") final UUID id){
+        return ResponseEntity.ok().body(basketService.checkout(id));
     }
 
 }

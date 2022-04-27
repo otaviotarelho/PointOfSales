@@ -1,9 +1,11 @@
-package edu.otaciotarelho.pointofsale.business;
+package edu.otaciotarelho.pointofsale.business.service;
 
 import edu.otaciotarelho.pointofsale.business.repository.BasketRepository;
 import edu.otaciotarelho.pointofsale.domain.business.BasketService;
+import edu.otaciotarelho.pointofsale.domain.business.CheckoutService;
 import edu.otaciotarelho.pointofsale.domain.checkout.Basket;
 import edu.otaciotarelho.pointofsale.domain.checkout.Item;
+import edu.otaciotarelho.pointofsale.domain.checkout.dto.BasketDTO;
 import edu.otaciotarelho.pointofsale.domain.exception.BasketNotFoundException;
 import edu.otaciotarelho.pointofsale.domain.external.Product;
 import edu.otaciotarelho.pointofsale.domain.external.ProductService;
@@ -20,13 +22,18 @@ public class BasketServiceImpl implements BasketService {
     @Qualifier("productIntegration/v1")
     private final ProductService productService;
 
+    @Qualifier("checkout/v1")
+    private final CheckoutService checkoutService;
+
     private final BasketRepository repository;
 
     @Autowired
     public BasketServiceImpl(ProductService productService,
-                             BasketRepository repository) {
+                             BasketRepository repository,
+                             CheckoutService checkoutService) {
         this.productService = productService;
         this.repository = repository;
+        this.checkoutService = checkoutService;
     }
 
     @Override
@@ -80,12 +87,10 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public Basket checkout(UUID id) {
-        return repository.findById(id)
+    public BasketDTO checkout(UUID id) {
+        var basket =  repository.findById(id)
                 .orElseThrow(BasketNotFoundException::new);
-
-        //get all products
-        //calculate promotions
-        //return to user
+        return checkoutService.checkout(basket);
     }
+
 }

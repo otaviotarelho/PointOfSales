@@ -1,6 +1,7 @@
 package edu.otaciotarelho.pointofsale.domain.business;
 
 import edu.otaciotarelho.pointofsale.domain.checkout.Basket;
+import edu.otaciotarelho.pointofsale.domain.checkout.dto.BasketDTO;
 
 import java.util.UUID;
 
@@ -10,6 +11,6 @@ public interface BasketService {
     Basket removeItemFromBasket(UUID basketId, String itemId);
     Basket createBasket();
     void removeBasket(UUID id);
-    Basket checkout(UUID id);
+    BasketDTO checkout(UUID id);
 
 }

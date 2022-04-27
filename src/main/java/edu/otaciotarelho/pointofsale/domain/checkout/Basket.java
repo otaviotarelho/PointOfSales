@@ -31,7 +31,7 @@ public class Basket {
     private UUID id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "basket_id")
     private List<Item> items;
 
     @Transient
