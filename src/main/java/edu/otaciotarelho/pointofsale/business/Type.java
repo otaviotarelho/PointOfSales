@@ -12,7 +12,11 @@ public enum Type  implements BiFunction<ItemDTO, Promotion, BigDecimal> {
     FLAT_PERCENT ("FLAT_PERCENT") {
         @Override
         public BigDecimal apply(ItemDTO item, Promotion promotion){
-            return item.getPrice().multiply(promotion.getAmount().divide(BigDecimal.valueOf(100), CEILING));
+            return item.getPrice().subtract(
+                    item.getPrice().multiply(
+                            promotion.getAmount().divide(BigDecimal.valueOf(100), CEILING)
+                    )
+            );
         }
     },
     QTY_BASED_PRICE_OVERRIDE ("QTY_BASED_PRICE_OVERRIDE") {
