@@ -22,11 +22,11 @@ A: For each test it was about 1 hour total (functional and manual testing)
 
 2. What would you add if you had more time?
 A: I would add:
-   - More test scenarios, specially for user case
+   - More test scenarios, specially for user case and promotions calculations
    - Divide api, business and domain into modules
    - Add circuit break for when the product api is off
    - Use docker to run the application in any environment
-   - Improve promotions calculations code
+   - Improve promotions calculations code for better reading
 
 3. How would you improve the product APIs that you had to consume?
 It was kinda hard to read the mappings, I suggest to have some api specification (Open API for example) or include in the documentation.
@@ -35,6 +35,8 @@ Also, prices should be expressed in double or big decimal
 
 4. What did you find most difficult?
 - Making the calculations based on promotions
+- The examples provided didn't match the returned product in the wiremock, if I try to run a test with the example I will not achieve the same result.
+- I got a bit confused related to promotions requirement
 
 
 5. How did you find the overall experience, any feedback for us?
