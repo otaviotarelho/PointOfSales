@@ -11,6 +11,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @EnableWebMvc
@@ -22,13 +24,13 @@ public class ControllerHandler extends ResponseEntityExceptionHandler {
             ProductNotFoundException.class,
             EmptyBasketException.class
     })
-    public ResponseEntity<StandardError> handleException(BasketNotFoundException e, WebRequest request){
+    public ResponseEntity<StandardError> handleException(BasketNotFoundException e, HttpServletRequest request){
         var err  = StandardError.builder()
                 .timestamp(System.currentTimeMillis())
                 .status(NOT_FOUND.value())
                 .error("Error occurred processing request")
                 .message(e.getMessage())
-                .path(request.getContextPath())
+                .path(request.getRequestURI())
                 .build();
 
         return ResponseEntity.status(NOT_FOUND).body(err);
