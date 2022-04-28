@@ -1,9 +1,17 @@
 package edu.otaciotarelho.pointofsale.domain.exception;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
+@Data
 @Builder
-public class StandardError {
+@NoArgsConstructor
+@AllArgsConstructor
+public class StandardError implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long timestamp;
     private Integer status;

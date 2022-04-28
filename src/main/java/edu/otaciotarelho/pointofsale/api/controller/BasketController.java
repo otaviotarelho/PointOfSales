@@ -52,7 +52,7 @@ public class BasketController {
                     @PathVariable("product_id") final String productId) {
         basketService.removeItemFromBasket(id, productId);
         return ResponseEntity.ok().build();
-    } //didn't worked
+    }
 
     @PostMapping
     ResponseEntity<Basket> createBasket(){
